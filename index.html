@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-3 text-primary">Temp System</h1>
+        <div class="row">
+            <div class="col-md-6 p-2">
+                <div class="border p-2">
+                    <textarea id="data-textarea" class="border" cols="30" rows="10" style="height: 100%; width: 100%; box-sizing: border-box;"></textarea>
+                    <button id="result-btn" class="btn btn-primary" style="margin-left: auto;">Show Result</button>
+                </div>
+            </div>
+            <div class="col-md-6 p-2">
+                <div class="border p-2">
+                    <label class="text-primary">Result</label>
+                </div>
+                <div class="border p-2">
+                    <p id="result-msg">Nothing to show.</p>
+                    <table id="result-tbl" class="table d-none">
+                        <thead>
+                            <tr>
+                                <th scope="col">Untitled</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        const resultBtn = document.querySelector("#result-btn");
+        const dataTextarea = document.querySelector("#data-textarea");
+        const resultTblBody = document.querySelector("#result-tbl tbody");
+        const resultMsg = document.querySelector("#result-msg");
+        resultBtn.addEventListener("click", function(){
+            resultMsg.classList.add("d-none");
+            resultTblBody.innerHTML = "";
+            resultTblBody.parentElement.classList.remove("d-none");
+            const rawData = dataTextarea.value;
+            let arr = [];
+            const data = rawData.split("\n");
+            for(i = 0; i < data.length; i++){
+                arr.push(data[i].split("\t"));
+            }
+            let condition = 5;
+            // Y-axis
+            for(y = 0; y < arr.length; y++){
+                let count = 0;
+                let total = 0;
+                // X-axis
+                for(x = 0; x < arr[y].length; x++){
+                    // Truly value
+                    if(parseInt(arr[y][x])){
+                        count+= 1;
+                        total+= parseInt(arr[y][x]);
+                    } else {
+                        count = 0;
+                        total = 0;
+                    }
+                    if(count >= 5){
+                        const newRow = document.createElement("tr");
+                        newRow.innerHTML = '<td scope="row">' + total + '</td>';
+                        resultTblBody.appendChild(newRow);
+                        break;
+                    }
+                }
+                if(count < 5){
+                    const newRow = document.createElement("tr");
+                    newRow.innerHTML = '<td scope="row">' + 0 + '</td>';
+                    resultTblBody.appendChild(newRow);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
